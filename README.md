@@ -50,14 +50,14 @@ Por está sendo utilizando o Expo, você pode utilizar ou algum device do Androi
 ## Preview 🖼️
 
 # Tela Home - Todos Vazios
-![Login Screen](./assets/zero-one.png)
+![Tela Home - Todos Vazios](./assets/zero-one.png)
 
 # Tela Home - Adicionando tarefa
-![Login Screen filled](./assets/zero-two.png)
+![Tela Home - Adicionando tarefa](./assets/zero-two.png)
 
 # Tela Home - Tarefa concluída
-![Home Screen](./assets/zero-three.png)
+![Tela Home - Tarefa concluída](./assets/zero-three.png)
 
 # Tela Home - Removendo tarefa
-![Favorite Screen](./assets/zero-four.png)
+![Tela Home - Removendo tarefa](./assets/zero-four.png)
 

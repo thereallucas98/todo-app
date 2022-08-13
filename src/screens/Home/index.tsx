@@ -4,12 +4,11 @@ import {
   FlatList,
   Image,
   Keyboard,
+  StatusBar,
   Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
+
 import { Feather } from "@expo/vector-icons";
 
 import { AmountInfo } from "../../components/AmountInfo";
@@ -18,6 +17,7 @@ import Logo from "../../assets/logo.png";
 
 import { homeStyles } from "./styles";
 import { Todo } from "../../components/Todo";
+import { Input } from "../../components/Input";
 
 interface Todos {
   id: string;
@@ -25,14 +25,10 @@ interface Todos {
   description: string;
 }
 
-const MAX_DESCRIPTION_LENGTH = 60;
-
 export function Home() {
-  const [description, setDescription] = useState("");
   const [todos, setTodos] = useState<Todos[]>([]);
 
   let finishedTodos = todos.filter((todo) => todo.checked);
-  let currentTodoDescriptionLength = description.length;
 
   function handleAddTodo(description: string) {
     if (description === "") {
@@ -58,7 +54,7 @@ export function Home() {
     };
 
     setTodos((oldState) => [...oldState, todo]);
-    setDescription("");
+    Keyboard.dismiss();
   }
 
   function handleTaskToDone(id: string) {
@@ -70,13 +66,10 @@ export function Home() {
       return { ...item };
     });
 
-    setDescription("");
     setTodos(updateTodoTask);
   }
 
   function handleRemoveTodo(id: string, onLongPressRef: boolean) {
-    setDescription("");
-
     if (onLongPressRef) {
       setTodos((oldState) => oldState.filter((todo) => todo.id !== id));
       return;
@@ -103,80 +96,51 @@ export function Home() {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={homeStyles.container}>
-        <View style={homeStyles.header}>
-          <Image source={Logo} />
-        </View>
-        <View style={homeStyles.body}>
-          <View style={homeStyles.inputWrapper}>
-            <TextInput
-              style={homeStyles.input}
-              placeholder="Adicione uma nova tarefa"
-              placeholderTextColor="#808080"
-              value={description}
-              onChangeText={setDescription}
-              selectTextOnFocus={description.length === 60}
-            />
-            <TouchableOpacity
-              style={homeStyles.addButton}
-              activeOpacity={0.7}
-              onPress={() => handleAddTodo(description)}
-            >
-              <Feather name="plus-circle" size={18} color="#FFF" />
-            </TouchableOpacity>
-          </View>
-          <View style={homeStyles.descriptionLengthWrapper}>
-            <Text style={homeStyles.descriptionLength}>
-              {description.length <= 60
-                ? `${
-                    MAX_DESCRIPTION_LENGTH - currentTodoDescriptionLength
-                  } caracteres restantes`
-                : `${
-                    (MAX_DESCRIPTION_LENGTH - currentTodoDescriptionLength) * -1
-                  } caratere(s) a mais`}
-            </Text>
-          </View>
-          <View style={homeStyles.infoWrapper}>
-            <AmountInfo
-              label={"Criadas"}
-              amount={todos.length}
-              type="created"
-            />
-            <AmountInfo
-              label="Concluídas"
-              amount={finishedTodos.length}
-              type="finished"
-            />
-          </View>
-          {todos.length > 0 ? (
-            <FlatList
-              data={todos}
-              keyExtractor={(item) => String(item.id)}
-              contentContainerStyle={{ marginTop: 32, paddingBottom: 24 }}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <Todo
-                  key={item.id}
-                  data={item}
-                  onTaskDone={handleTaskToDone}
-                  onRemoveTask={handleRemoveTodo}
-                />
-              )}
-            />
-          ) : (
-            <View style={homeStyles.todos}>
-              <Feather name="clipboard" size={56} color="#808080" />
-              <Text style={[homeStyles.infoText, homeStyles.infoTextRegular]}>
-                Você ainda não tem tarefas cadastradas
-              </Text>
-              <Text style={[homeStyles.infoText, homeStyles.infoTextBold]}>
-                Crie tarefas e organize seus itens a fazer
-              </Text>
-            </View>
-          )}
+    <View style={homeStyles.container}>
+      <StatusBar backgroundColor="#0D0D0D" barStyle="light-content" />
+      <View style={homeStyles.header}>
+        <Image source={Logo} />
+      </View>
+      <View style={homeStyles.body}>
+        <Input onAddTodo={handleAddTodo} />
+        <View style={homeStyles.infoWrapper}>
+          <AmountInfo label={"Criadas"} amount={todos.length} type="created" />
+          <AmountInfo
+            label="Concluídas"
+            amount={finishedTodos.length}
+            type="finished"
+          />
         </View>
       </View>
-    </TouchableWithoutFeedback>
+      <FlatList
+        data={todos}
+        keyExtractor={(item) => String(item.id)}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 24,
+          padding: 16,
+          marginBottom: 16,
+        }}
+        renderItem={({ item }) => (
+          <Todo
+            key={item.id}
+            data={item}
+            onTaskDone={handleTaskToDone}
+            onRemoveTask={handleRemoveTodo}
+          />
+        )}
+        ListEmptyComponent={() => (
+          <View style={homeStyles.todos}>
+            <Feather name="clipboard" size={56} color="#808080" />
+            <Text style={[homeStyles.infoText, homeStyles.infoTextRegular]}>
+              Você ainda não tem tarefas cadastradas
+            </Text>
+            <Text style={[homeStyles.infoText, homeStyles.infoTextBold]}>
+              Crie tarefas e organize seus itens a fazer
+            </Text>
+          </View>
+        )}
+      />
+    </View>
   );
 }

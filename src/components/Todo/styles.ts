@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 
 export const todoStyles = StyleSheet.create({
   container: {
-    width: "100%",
     height: 64,
 
     marginTop: 8,

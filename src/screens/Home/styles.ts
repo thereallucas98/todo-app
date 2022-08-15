@@ -9,8 +9,21 @@ export const homeStyles = StyleSheet.create({
     height: 173,
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     backgroundColor: "#0D0D0D",
+    flexDirection: "row",
+
+    padding: 24,
+  },
+  flags: {
+    flexDirection: "row",
+  },
+  flagButton: {
+    marginRight: 12,
+  },
+  flagButtonActive: {
+    borderColor: "#4EA8DE",
+    borderWidth: 2,
   },
   body: {
     marginTop: -50,

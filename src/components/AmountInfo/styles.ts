@@ -10,7 +10,7 @@ export const amountInfoStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     fontFamily: "Inter_700Bold",
-    
+
     marginRight: 8,
   },
   labelCreated: {

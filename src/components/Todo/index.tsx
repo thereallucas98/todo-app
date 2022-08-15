@@ -29,7 +29,14 @@ function Todo({ data, onTaskDone, onRemoveTask }: TodoProps) {
         </TouchableOpacity>
       </View>
       <View style={todoStyles.textWrapper}>
-        <Text style={[todoStyles.description, data.checked && todoStyles.descriptionActived]}>{data.description}</Text>
+        <Text
+          style={[
+            todoStyles.description,
+            data.checked && todoStyles.descriptionActived,
+          ]}
+        >
+          {data.description}
+        </Text>
       </View>
       <View style={todoStyles.buttonWrapper}>
         <TouchableOpacity

@@ -6,7 +6,7 @@ export const todoStyles = StyleSheet.create({
 
     marginTop: 8,
     paddingHorizontal: 12,
-    
+
     borderRadius: 8,
     borderColor: "#333333",
     borderWidth: 1,
@@ -31,7 +31,6 @@ export const todoStyles = StyleSheet.create({
     borderRadius: 24,
     borderWidth: 2,
     borderColor: "#4EA8DE",
-
   },
   leftButtonActived: {
     borderWidth: 1,

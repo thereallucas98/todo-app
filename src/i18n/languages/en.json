@@ -1,0 +1,25 @@
+{
+  "translation": {
+    "inputPlaceholder": "Create a new task",
+    "amountOfAvailableCharacters": "characteres remaining",
+    "amountOfCharactersIsBiggerThan": "extra character(s)",
+    "createdTasks": "Created",
+    "finishedTasks": "Done",
+    "info": {
+      "hasNoTasks": "You don't have tasks registered yet",
+      "createTasks": "Create tasks and organize your todos"
+    },
+    "alerts": {
+      "atention": "Warning",
+      "taskRemove": "Task Removal",
+      "removeDescription": "Do you really want to delete this task?",
+      "emptyTodos": "We cannot register tasks with empty descriptions.",
+      "limitedTaskByCharacters": "We cannot register tasks with a description longer than 60 characters."
+    },
+    "buttons": {
+      "no": "No",
+      "iDo": "Yes, I do"
+    }
+
+  }
+}

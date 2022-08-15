@@ -6,8 +6,15 @@ import {
   Keyboard,
   StatusBar,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
+
+import CountryFlag from "react-native-country-flag";
+
+import { useTranslation } from "react-i18next";
+
+import "../../i18n";
 
 import { Feather } from "@expo/vector-icons";
 
@@ -15,9 +22,10 @@ import { AmountInfo } from "../../components/AmountInfo";
 
 import Logo from "../../assets/logo.png";
 
-import { homeStyles } from "./styles";
 import { Todo } from "../../components/Todo";
 import { Input } from "../../components/Input";
+
+import { homeStyles } from "./styles";
 
 interface Todos {
   id: string;
@@ -26,23 +34,32 @@ interface Todos {
 }
 
 export function Home() {
+  const { t, i18n } = useTranslation();
+
+  function changeLanguage(lang: string) {
+    i18n
+      .changeLanguage(lang)
+      .then(() => {
+        setCurrentLanguage(lang);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  const [currentLanguage, setCurrentLanguage] = useState("en");
   const [todos, setTodos] = useState<Todos[]>([]);
 
   let finishedTodos = todos.filter((todo) => todo.checked);
 
   function handleAddTodo(description: string) {
     if (description === "") {
-      Alert.alert(
-        "Atenção",
-        "Não podemos cadastrar tarefas com descrição vazias."
-      );
+      Alert.alert(`${t("alerts.atention")}`, `${t("alerts.emptyTodos")}`);
       return;
     }
 
     if (description.length > 60) {
       Alert.alert(
-        "Atenção",
-        "Não podemos cadastrar tarefas com descrição maior de que 60 caracteres"
+        `${t("alerts.atention")}`,
+        `${t("alerts.limitedTaskByCharacters")}`
       );
       return;
     }
@@ -76,16 +93,16 @@ export function Home() {
     }
 
     Alert.alert(
-      "Remoção de Tarefa",
-      "Você realmente deseja excluir essa tarefa?",
+      `${t("alerts.taskRemove")}`,
+      `${t("alerts.removeDescription")}`,
       [
         {
-          text: "Não",
+          text: `${t("buttons.no")}`,
           onPress: () => {},
           style: "cancel",
         },
         {
-          text: "Sim, desejo",
+          text: `${t("buttons.iDo")}`,
           onPress: () => {
             setTodos((oldState) => oldState.filter((todo) => todo.id !== id));
           },
@@ -100,13 +117,34 @@ export function Home() {
       <StatusBar backgroundColor="#0D0D0D" barStyle="light-content" />
       <View style={homeStyles.header}>
         <Image source={Logo} />
+        <View style={homeStyles.flags}>
+          <TouchableOpacity
+            style={[
+              homeStyles.flagButton,
+              currentLanguage === "pt" && homeStyles.flagButtonActive,
+            ]}
+            onPress={() => changeLanguage("pt")}
+          >
+            <CountryFlag isoCode="br" size={25} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={currentLanguage === "en" && homeStyles.flagButtonActive}
+            onPress={() => changeLanguage("en")}
+          >
+            <CountryFlag isoCode="us" size={25} />
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={homeStyles.body}>
         <Input onAddTodo={handleAddTodo} />
         <View style={homeStyles.infoWrapper}>
-          <AmountInfo label={"Criadas"} amount={todos.length} type="created" />
           <AmountInfo
-            label="Concluídas"
+            label={t("createdTasks")}
+            amount={todos.length}
+            type="created"
+          />
+          <AmountInfo
+            label={t("finishedTasks")}
             amount={finishedTodos.length}
             type="finished"
           />
@@ -133,10 +171,10 @@ export function Home() {
           <View style={homeStyles.todos}>
             <Feather name="clipboard" size={56} color="#808080" />
             <Text style={[homeStyles.infoText, homeStyles.infoTextRegular]}>
-              Você ainda não tem tarefas cadastradas
+              {t("info.hasNoTasks")}
             </Text>
             <Text style={[homeStyles.infoText, homeStyles.infoTextBold]}>
-              Crie tarefas e organize seus itens a fazer
+              {t("info.createTasks")}
             </Text>
           </View>
         )}

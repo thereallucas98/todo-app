@@ -1,0 +1,24 @@
+{
+  "translation": {
+    "inputPlaceholder": "Adicione uma nova tarefa",
+    "amountOfAvailableCharacters": "caracteres restantes",
+    "amountOfCaracteresIsBiggerThan": "caractere(s) a mais",
+    "createdTasks": "Criadas",
+    "finishedTasks": "Concluídas",
+    "info": {
+      "hasNoTasks": "Você ainda não tem tarefas cadastradas",
+      "createTasks": "Crie tarefas e organize seus itens a fazer"
+    },
+    "alerts": {
+      "atention": "Atenção",
+      "taskRemove": "Remoção de Tarefa",
+      "removeDescription": "Você realmente deseja excluir essa tarefa?",
+      "emptyTodos": "Não podemos criar uma tarefa com descrição vazia",
+      "limitedTaskByCharacters": "Não podemos cadastrar tarefas com descrição maior de que 60 caracteres."
+    },
+    "buttons": {
+      "no": "Não",
+      "iDo": "Sim, desejo"
+    }
+  }
+}

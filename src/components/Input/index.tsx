@@ -4,10 +4,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
+
+import { useTranslation } from "react-i18next";
+
+import "../../i18n";
+
 import { inputStyles } from "./styles";
 
 const MAX_DESCRIPTION_LENGTH = 60;
@@ -17,6 +21,8 @@ interface InputProps {
 }
 
 function Input({ onAddTodo }: InputProps) {
+  const { t } = useTranslation();
+
   const [description, setDescription] = useState("");
 
   let currentTodoDescriptionLength = description.length;
@@ -32,7 +38,7 @@ function Input({ onAddTodo }: InputProps) {
       <View style={inputStyles.inputWrapper}>
         <TextInput
           style={inputStyles.input}
-          placeholder="Adicione uma nova tarefa"
+          placeholder={t("inputPlaceholder")}
           placeholderTextColor="#808080"
           value={description}
           onChangeText={setDescription}
@@ -42,6 +48,7 @@ function Input({ onAddTodo }: InputProps) {
           style={inputStyles.addButton}
           activeOpacity={0.7}
           onPress={() => handleAddTodo(description)}
+          disabled={currentTodoDescriptionLength > 60}
         >
           <Feather name="plus-circle" size={18} color="#FFF" />
         </TouchableOpacity>
@@ -49,12 +56,12 @@ function Input({ onAddTodo }: InputProps) {
       <View style={inputStyles.descriptionLengthWrapper}>
         <Text style={inputStyles.descriptionLength}>
           {description.length <= 60
-            ? `${
-                MAX_DESCRIPTION_LENGTH - currentTodoDescriptionLength
-              } caracteres restantes`
+            ? `${MAX_DESCRIPTION_LENGTH - currentTodoDescriptionLength} ${t(
+                "amountOfAvailableCharacters"
+              )}`
             : `${
                 (MAX_DESCRIPTION_LENGTH - currentTodoDescriptionLength) * -1
-              } caratere(s) a mais`}
+              } ${t("amountOfCaracteresIsBiggerThan")}`}
         </Text>
       </View>
     </>

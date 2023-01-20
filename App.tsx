@@ -11,11 +11,15 @@ import {
 } from "@expo-google-fonts/inter";
 
 import { Home } from "./src/screens/Home";
+import { initalizateServer } from "./src/api/mock";
+
+initalizateServer();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
+    console.log("useEffect app")
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();

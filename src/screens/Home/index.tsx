@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -46,6 +46,7 @@ export function Home() {
   }
 
   const [currentLanguage, setCurrentLanguage] = useState("en");
+  const [hasCreatedNewOne, setHasCreatedNewOne] = useState(false);
   const [todos, setTodos] = useState<Todos[]>([]);
 
   let finishedTodos = todos.filter((todo) => todo.checked);
@@ -70,25 +71,44 @@ export function Home() {
       description,
     };
 
-    setTodos((oldState) => [...oldState, todo]);
+    fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify(todo),
+    })
+      .then(() => setHasCreatedNewOne(true))
+      .catch((err) => console.error(err))
+      .finally(() => setHasCreatedNewOne(false));
+
+    // setTodos((oldState) => [...oldState, todo]);
     Keyboard.dismiss();
   }
 
   function handleTaskToDone(id: string) {
-    const updateTodoTask = todos.map((item) => {
-      if (item.id === id) {
-        item.checked = !item.checked;
-      }
+    const todo = todos.find((todo) => todo.id === id);
 
-      return { ...item };
-    });
+    const todoToUpdate = {
+      ...todo,
+      checked: !todo?.checked,
+    };
 
-    setTodos(updateTodoTask);
+    fetch(`/api/todos/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(todoToUpdate),
+    })
+      .then(() => setHasCreatedNewOne(true))
+      .catch((err) => console.error(err))
+      .finally(() => setHasCreatedNewOne(false));
   }
 
   function handleRemoveTodo(id: string, onLongPressRef: boolean) {
     if (onLongPressRef) {
-      setTodos((oldState) => oldState.filter((todo) => todo.id !== id));
+      fetch(`/api/todos/${id}`, {
+        method: "DELETE",
+      })
+        .then(() => setHasCreatedNewOne(true))
+        .catch((err) => console.error(err))
+        .finally(() => setHasCreatedNewOne(false));
+
       return;
     }
 
@@ -104,13 +124,24 @@ export function Home() {
         {
           text: `${t("buttons.iDo")}`,
           onPress: () => {
-            setTodos((oldState) => oldState.filter((todo) => todo.id !== id));
+            fetch(`/api/todos/${id}`, {
+              method: "DELETE",
+            })
+              .then(() => setHasCreatedNewOne(true))
+              .catch((err) => console.error(err))
+              .finally(() => setHasCreatedNewOne(false));
           },
           style: "destructive",
         },
       ]
     );
   }
+
+  useEffect(() => {
+    fetch("/api/todos")
+      .then((res) => res.json())
+      .then((json) => setTodos(json.todos));
+  }, [hasCreatedNewOne]);
 
   return (
     <View style={homeStyles.container}>
